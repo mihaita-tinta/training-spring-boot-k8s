@@ -4,13 +4,13 @@ Simple Spring Boot app deployment on Minikube
 
 ==== Install apps
 
-VirtualBox:
+- VirtualBox:
 https://www.virtualbox.org/wiki/Downloads
-Docker:
+- Docker:
 https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows
-Minikube:
+- Minikube:
 https://storage.googleapis.com/minikube/releases/latest/minikube-windows-amd64.exe
-Kubectl:
+- Kubectl:
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 ==== Start Minikube 
