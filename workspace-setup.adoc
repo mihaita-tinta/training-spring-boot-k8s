@@ -15,11 +15,12 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 ==== Start Minikube 
 
-- Install Minikube from https://kubernetes.io/docs/tasks/tools/install-minikube/
-
-- Install `kubectl` from https://kubernetes.io/docs/tasks/tools/install-kubectl/
-
-Then, start Minikube:
+In Powershell/cmd (Run as Administrator):
 
 	minikube start --kubernetes-version="v1.8.0" --vm-driver="virtualbox" --memory=4096 --cpus=4 --disk-size=30g --v=7 --alsologtostderr
+
+==== Create a Spring Boot app
+
+Go to:
+	https://start.spring.io
 
