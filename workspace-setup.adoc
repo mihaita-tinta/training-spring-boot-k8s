@@ -22,5 +22,15 @@ In Powershell/cmd (Run as Administrator):
 ==== Create a Spring Boot app
 
 Go to:
-	https://start.spring.io
+	wget https://start.spring.io
+	
+$APP_PROPS = @{
+    "dependencies" = "web,actuator"
+    "groupId" = "com.mih.k8s"
+    "name" = "rest1"
+	"artifactId" = "rest1"
+	"baseDir"="rest1"
+	"bootVersion"="1.5.8"
+} | ConvertTo-Json
 
+wget -Uri https://start.spring.io/starter.zip -Method Post -Body $APP_PROPS -OutFile rest1.zip
