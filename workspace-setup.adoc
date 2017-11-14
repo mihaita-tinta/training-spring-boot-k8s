@@ -19,24 +19,27 @@ In Powershell/cmd (Run as Administrator):
 
 	minikube start --kubernetes-version="v1.8.0" --vm-driver="virtualbox" --memory=4096 --cpus=4 --disk-size=30g --v=7 --alsologtostderr
 
+	& minikube docker-env | Invoke-Expression
+	
 ==== Create a Spring Boot app
 
-Generate new apps using the boot starter:
+Generate new apps using the boot starter. Go to https://start.spring.io/ and choose Web, Actuator dependencies
+Unzip the project and then:
 
 ----
-	$APP_PROPS = @{
-		"dependencies" = "web,actuator"
-		"groupId" = "com.mih.k8s"
-		"name" = "rest1"
-		"artifactId" = "rest1"
-		"baseDir"="rest1"
-		"bootVersion"="1.5.8"
-	} | ConvertTo-Json
-
-	wget -Uri https://start.spring.io/starter.zip -Method Post -Body $APP_PROPS -OutFile rest1.zip
+	cd rest1
+	mvnw install
+	mkdir docker
+	cp .\target\rest1-0.0.1-SNAPSHOT.jar docker/
+	cp ..\sample-dockerfile.txt .\docker\Dockerfile
 ----
 
-Unzip the app:
+Create the docker image
 
-	Expand-Archive rest1.zip rest1
+----
+	docker build docker/
+	docker images
+	docker tag <IMAGE_ID> rest1:v.0.1
+	
+	
 	
