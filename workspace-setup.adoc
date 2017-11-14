@@ -35,3 +35,8 @@ Generate new apps using the boot starter:
 
 	wget -Uri https://start.spring.io/starter.zip -Method Post -Body $APP_PROPS -OutFile rest1.zip
 ----
+
+Unzip the app:
+
+	Expand-Archive rest1.zip rest1
+	
