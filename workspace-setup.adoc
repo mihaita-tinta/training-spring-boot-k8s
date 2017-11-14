@@ -47,5 +47,12 @@ Create resurces in kubernetes
 ----
 	kubectl apply -f ..\k8s\
 ----
+
+We can see a pod running:
+
+	kubectl get pods
+	
+NAME                    READY     STATUS    RESTARTS   AGE
+rest1-84cc5b858-mrgdd   1/1       Running   0          13m
 	
 	
