@@ -51,7 +51,10 @@ Create resurces in kubernetes
 We can see a pod running:
 
 	kubectl get pods
-	
+	kubectl get svc
+	minikube service rest1
+	kubectl get deploy/rest1 -o yaml
+	kubectl get svc/rest1 -o yaml
 ----
 NAME                    READY     STATUS    RESTARTS   AGE
 rest1-84cc5b858-mrgdd   1/1       Running   0          13m

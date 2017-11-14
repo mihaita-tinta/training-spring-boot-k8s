@@ -8,6 +8,7 @@ metadata:
 spec:
   selector:
     app: rest1
+  type: NodePort
   ports:
   - name: web
     port: 8080

@@ -4,7 +4,7 @@ metadata:
   name: rest1
   namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
