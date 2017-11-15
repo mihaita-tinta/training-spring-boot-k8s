@@ -42,6 +42,10 @@ Create the docker image
 	docker tag <IMAGE_ID> rest1:v.0.1	
 ----
 
+Before going further, you can check this short introduction:
+	
+	https://www.youtube.com/watch?v=PH-2FfFD2PU
+	
 Create resurces in kubernetes
 
 ----
