@@ -79,3 +79,72 @@ Print the deployment/service configuration
 	kubectl get deploy/rest1 -o yaml
 	kubectl get svc/rest1 -o yaml
 	
+Edit the deployment and set to replicas:
+
+	kubectl edit deployment/rest1
+
+Check the status of the ReplicaSet
+	
+	kubectl get replicaset
+
+----
+NAME              DESIRED   CURRENT   READY     AGE
+rest1-84cc5b858   2         2         1         19h
+----
+
+	kubectl get pods
+	
+----
+NAME                    READY     STATUS    RESTARTS   AGE
+rest1-84cc5b858-7j22p   0/1       Running   0          27s
+rest1-84cc5b858-mrgdd   1/1       Running   1          19h
+----
+
+Get more information about what's happening
+
+----
+	kubectl describe deployments
+	
+Name:                   rest1
+Namespace:              default
+CreationTimestamp:      Tue, 14 Nov 2017 14:22:02 +0200
+Labels:                 app=rest1
+Annotations:            deployment.kubernetes.io/revision=1
+                        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotation
+s":{},"name":"rest1","namespace":"default"},"spec":{"replicas":1,"templat...
+Selector:               app=rest1
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  1 max unavailable, 1 max surge
+Pod Template:
+  Labels:  app=rest1
+  Containers:
+   rest1-app:
+    Image:  rest1:v.0.1
+    Port:   8080/TCP
+    Limits:
+      cpu:     1
+      memory:  512Mi
+    Requests:
+      cpu:      500m
+      memory:   256Mi
+    Liveness:   http-get http://:web/health delay=180s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:web/info delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      SPRING_PROFILES_ACTIVE:  prod
+      JAVA_TOOL_OPTIONS:        -Xmx512m -Xms256m
+    Mounts:                    <none>
+  Volumes:                     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   rest1-84cc5b858 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  9m    deployment-controller  Scaled down replica set rest1-84cc5b858 to 1
+  Normal  ScalingReplicaSet  1m    deployment-controller  Scaled up replica set rest1-84cc5b858 to 2
+----
