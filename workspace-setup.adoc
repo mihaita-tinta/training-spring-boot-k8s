@@ -1,4 +1,4 @@
-== Setup Workspace
+== Spring Boot + Kubernetes 
 
 Simple Spring Boot app deployment on Minikube
 
@@ -85,16 +85,14 @@ Edit the deployment and set to replicas:
 
 Check the status of the ReplicaSet
 	
+----
 	kubectl get replicaset
 
-----
 NAME              DESIRED   CURRENT   READY     AGE
 rest1-84cc5b858   2         2         1         19h
-----
 
 	kubectl get pods
 	
-----
 NAME                    READY     STATUS    RESTARTS   AGE
 rest1-84cc5b858-7j22p   0/1       Running   0          27s
 rest1-84cc5b858-mrgdd   1/1       Running   1          19h
@@ -147,4 +145,118 @@ Events:
   ----    ------             ----  ----                   -------
   Normal  ScalingReplicaSet  9m    deployment-controller  Scaled down replica set rest1-84cc5b858 to 1
   Normal  ScalingReplicaSet  1m    deployment-controller  Scaled up replica set rest1-84cc5b858 to 2
+----
+
+==== Rolling update
+
+We need to create a new version of the rest1 and make the update
+
+Add a controller for the root page so we can see something different from the error page
+
+----
+package com.mih.rest1;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class Rest1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Rest1Application.class, args);
+	}
+	
+    @RequestMapping("/")
+    public String root() {
+    	return "hello-k8s";
+    }
+}
+----
+
+Create the new docker image
+
+----
+	mvnw install
+	cp .\target\rest1-0.0.1-SNAPSHOT.jar docker/
+	docker build docker/
+	docker images
+	docker tag <IMAGE_ID> rest1:v.0.2
+----
+
+Update the deployment with the new image and perform a rolling update
+
+----
+	kubectl edit deployment/rest1
+	
+deployment "rest1" edited
+
+	kubectl rollout status deployment/rest1
+	
+Waiting for rollout to finish: 1 old replicas are pending termination...
+Waiting for rollout to finish: 1 old replicas are pending termination...
+Waiting for rollout to finish: 1 old replicas are pending termination...
+Waiting for rollout to finish: 1 of 2 updated replicas are available...
+deployment "rest1" successfully rolled out
+
+	kubectl get replicaset
+	
+NAME               DESIRED   CURRENT   READY     AGE
+rest1-7d5c88fc97   2         2         2         1m
+rest1-84cc5b858    0         0         0         19h
+
+	kubectl get pods
+	
+NAME                     READY     STATUS    RESTARTS   AGE
+rest1-7d5c88fc97-s97b4   1/1       Running   0          2m
+rest1-7d5c88fc97-xkb9h   1/1       Running   0          2m
+
+	kubectl describe deployments
+Name:                   rest1
+Namespace:              default
+CreationTimestamp:      Tue, 14 Nov 2017 14:22:02 +0200
+Labels:                 app=rest1
+Annotations:            deployment.kubernetes.io/revision=2
+                        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotation
+s":{},"name":"rest1","namespace":"default"},"spec":{"replicas":1,"templat...
+Selector:               app=rest1
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  1 max unavailable, 1 max surge
+Pod Template:
+  Labels:  app=rest1
+  Containers:
+   rest1-app:
+    Image:  rest1:v.0.2
+    Port:   8080/TCP
+    Limits:
+      cpu:     1
+      memory:  512Mi
+    Requests:
+      cpu:      500m
+      memory:   256Mi
+    Liveness:   http-get http://:web/health delay=180s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:web/info delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      SPRING_PROFILES_ACTIVE:  prod
+      JAVA_TOOL_OPTIONS:        -Xmx512m -Xms256m
+    Mounts:                    <none>
+  Volumes:                     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   rest1-7d5c88fc97 (2/2 replicas created)
+Events:
+  Type    Reason             Age               From                   Message
+  ----    ------             ----              ----                   -------
+  Normal  ScalingReplicaSet  20m               deployment-controller  Scaled up replica set rest1-84cc5b858 to 2
+  Normal  ScalingReplicaSet  2m (x2 over 28m)  deployment-controller  Scaled down replica set rest1-84cc5b858 to 1
+  Normal  ScalingReplicaSet  2m                deployment-controller  Scaled up replica set rest1-7d5c88fc97 to 1
+  Normal  ScalingReplicaSet  2m                deployment-controller  Scaled up replica set rest1-7d5c88fc97 to 2
+  Normal  ScalingReplicaSet  2m                deployment-controller  Scaled down replica set rest1-84cc5b858 to 0
 ----
