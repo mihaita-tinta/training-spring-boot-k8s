@@ -48,16 +48,34 @@ Create resurces in kubernetes
 	kubectl apply -f ..\k8s\
 ----
 
-We can see a pod running:
+List all the pods
 
 	kubectl get pods
-	kubectl get svc
-	minikube service rest1
-	kubectl get deploy/rest1 -o yaml
-	kubectl get svc/rest1 -o yaml
+
+We can see a pod running
+
 ----
 NAME                    READY     STATUS    RESTARTS   AGE
 rest1-84cc5b858-mrgdd   1/1       Running   0          13m
 ----
+
+List the services
+
+	kubectl get svc
+
+rest1 has type NodePort
+----
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+kubernetes   ClusterIP   10.0.0.1     <none>        443/TCP          7d
+rest1        NodePort    10.0.0.108   <none>        8080:31895/TCP   18h
+----
+
+Use minikube to expose the rest1 service. You can also pass the --url argument to get the external URL
+
+	minikube service rest1
+
+Print the deployment/service configuration
 	
+	kubectl get deploy/rest1 -o yaml
+	kubectl get svc/rest1 -o yaml
 	
