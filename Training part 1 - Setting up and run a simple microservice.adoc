@@ -46,7 +46,7 @@ Before going further, you can check this short introduction:
 	
 	https://www.youtube.com/watch?v=PH-2FfFD2PU
 	
-Create resurces in kubernetes
+You can find all the resources in the /part1 directory. Create resurces in kubernetes
 
 ----
 	kubectl apply -f ..\k8s\
