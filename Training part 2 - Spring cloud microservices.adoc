@@ -9,4 +9,19 @@ https://12factor.net/
 
 Information regarding the Spring Cloud framework is availble on the official website: http://projects.spring.io/spring-cloud/spring-cloud.html
 
+So, the Config Server can tell the microservices what is their configuration and the Eureka Server is used by the microservices
+to register and tell other microservices they can be invoked.
 
+Jhipster Registry (https://github.com/jhipster/jhipster-registry) is a really cool project that uses the Spring Cloud functionality of the Eureka Server and Config server into a single application.
+So, to run in into Kubernetes we need the deployment YAML file and apply it with the kubectl command
+
+The YAML files can be found in the /part2/k8s folder
+
+We will connect to the https://github.com/mihaita-tinta/configuration-server-resources.git repository
+and you should change it to your own location:
+
+----
+        - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+          value: https://github.com/mihaita-tinta/configuration-server-resources.git
+
+----

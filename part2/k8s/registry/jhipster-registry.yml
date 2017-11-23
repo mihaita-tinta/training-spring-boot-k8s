@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-secret
+  namespace: default
+type: Opaque
+data:
+  registry-admin-password: YWRtaW4= # base64 encoded "admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry
+  namespace: default
+  labels:
+    app: jhipster-registry
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: NodePort
+  ports:
+  - port: 8761
+  selector:
+    app: jhipster-registry
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: jhipster-registry
+  namespace: default
+spec:
+  serviceName: jhipster-registry
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jhipster-registry
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: jhipster-registry
+        image: jhipster/jhipster-registry:3.2.3
+        ports:
+        - containerPort: 8761
+        env:
+        # StatefulSet specific configuration
+        - name: CLUSTER_SIZE
+          value: "1"
+        - name: STATEFULSET_NAME
+          value: "jhipster-registry"
+        - name: STATEFULSET_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        # Registry configuration
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: 'false'
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+          value: 'false'
+        - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+          value: https://github.com/mihaita-tinta/configuration-server-resources.git
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |             
+            echo " Starting jHipster Registry . . ."
+            
+            java -jar /app.war
+             
+            echo "JHipster Registry started"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /central-config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: application-config
