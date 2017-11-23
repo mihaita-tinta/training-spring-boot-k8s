@@ -1,1 +1,12 @@
 == Spring cloud framework
+
+Before you start building microservices, there are a few things you need to consider and you should change your mindset before saying No.
+
+https://12factor.net/
+
+
+==== Hello Config Server, Hello Service Discovery
+
+Information regarding the Spring Cloud framework is availble on the official website: http://projects.spring.io/spring-cloud/spring-cloud.html
+
+
