@@ -126,3 +126,34 @@ jhipster-registry-0                   1/1       Running   0          34m
   4 | user          | user@localhost      | 2017-11-28 09:29:11.667743
 (4 rows)
 ----
+
+=== Conclusions
+
+Spring boot apps can allows externalizing the configuration: properties files, YAML files, environment variables and command-line arguments to externalize configuration.
+https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html
+Kubernetes get pass environment variables to the app from the deployment file. 
+The key JHIPSTER_REGISTRY_PASSWORD is jhipster.registry.password and we can pass values from the container context to the application context.
+
+----
+env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.default.svc.cluster.local:8761/config
+        - name: JHIPSTER_REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://gateway-postgresql.default.svc.cluster.local:5432/gateway
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+----
+
+If you prefer not using the command line, just run:
+----
+
+minikube dashboard
+
+----
