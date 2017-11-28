@@ -52,7 +52,7 @@ To access the web app from your favorite browser you should run:
 	
 ----
 
-	Get into the container and check the running java process:
+Get into the container and check the running java process:
 	
 ----
 	kubectl exec -it jhipster-registry-0 -- /bin/sh
@@ -77,6 +77,52 @@ Create the docker image for the gateway app.
 [INFO] Finished at: 2017-11-28T11:22:06+02:00
 [INFO] Final Memory: 69M/503M
 [INFO] ------------------------------------------------------------------------
+
+ docker images
+
+REPOSITORY     TAG                   IMAGE ID            CREATED             SIZE
+gateway        latest                ced00610c4e8        4 minutes ago       165MB
 ----
 
+Deploy the new app in your cluster:
+
+----
+	kubectl apply -f .\part2\k8s\gateway\
 	
+deployment "gateway" created
+deployment "gateway-postgresql" created
+service "gateway-postgresql" created
+service "gateway" created
+
+	kubectl get pods
+	
+NAME                                  READY     STATUS    RESTARTS   AGE
+gateway-85b884bd89-thsdz              0/1       Running   0          37s
+gateway-postgresql-6cbcf67ffd-kqkj7   1/1       Running   0          37s
+jhipster-registry-0                   1/1       Running   0          34m
+
+	kubectl exec -it gateway-postgresql-6cbcf67ffd-kqkj7 -- /bin/sh
+	psql gateway gateway
+	\dt
+	
+	 Schema |             Name              | Type  |  Owner
+--------+-------------------------------+-------+--------
+ public | databasechangelog             | table | gateway
+ public | databasechangeloglock         | table | gateway
+ public | jhi_authority                 | table | gateway
+ public | jhi_persistent_audit_event    | table | gateway
+ public | jhi_persistent_audit_evt_data | table | gateway
+ public | jhi_user                      | table | gateway
+ public | jhi_user_authority            | table | gateway
+(7 rows)
+
+	select id, login, email, created_date from jhi_user;
+	
+ id |     login     |        email        |        created_date
+----+---------------+---------------------+----------------------------
+  1 | system        | system@localhost    | 2017-11-28 09:29:11.667743
+  2 | anonymoususer | anonymous@localhost | 2017-11-28 09:29:11.667743
+  3 | admin         | admin@localhost     | 2017-11-28 09:29:11.667743
+  4 | user          | user@localhost      | 2017-11-28 09:29:11.667743
+(4 rows)
+----
