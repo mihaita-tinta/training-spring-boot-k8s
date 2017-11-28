@@ -4,6 +4,12 @@ Before you start building microservices, there are a few things you need to cons
 
 https://12factor.net/
 
+==== Setup
+
+You need to clone the training repository on your local machine:
+
+	git clone https://github.com/mihaita-tinta/training-spring-boot-k8s.git
+
 
 ==== Hello Config Server, Hello Service Discovery
 
@@ -13,9 +19,15 @@ So, the Config Server can tell the microservices what is their configuration and
 to register and tell other microservices they can be invoked.
 
 Jhipster Registry (https://github.com/jhipster/jhipster-registry) is a really cool project that uses the Spring Cloud functionality of the Eureka Server and Config server into a single application.
-So, to run in into Kubernetes we need the deployment YAML file and apply it with the kubectl command
+So, to run it into Kubernetes we need the deployment YAML file and apply it with the kubectl command
 
-The YAML files can be found in the /part2/k8s folder
+The YAML files can be found in the /part2/k8s/registry folder
+
+We need to delete everything from part 1 (Don't forget to run minikube and connect to docker)
+----
+	kubectl delete --all deployment --namespace=default
+	kubectl delete --all svc --namespace=default
+----
 
 We will connect to the https://github.com/mihaita-tinta/configuration-server-resources.git repository
 and you should change it to your own location:
@@ -25,3 +37,46 @@ and you should change it to your own location:
           value: https://github.com/mihaita-tinta/configuration-server-resources.git
 
 ----
+
+Deploy the jhipster-registry app:
+
+----
+	kubectl apply -f .\part2\k8s\registry\
+----
+
+To access the web app from your favorite browser you should run:
+
+----
+
+	minikube service jhipster-registry
+	
+----
+
+	Get into the container and check the running java process:
+	
+----
+	kubectl exec -it jhipster-registry-0 -- /bin/sh
+	ps ax|grep java
+----
+
+==== Register the first microservice
+
+The gateway app was generated using the jHipster generator. More info here: http://www.jhipster.tech/api-gateway/
+
+Create the docker image for the gateway app.
+
+----
+ cd .\part2\gateway\
+ .\mvnw clean package -Dprod docker:build
+ 
+[INFO] Built gateway
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 03:24 min
+[INFO] Finished at: 2017-11-28T11:22:06+02:00
+[INFO] Final Memory: 69M/503M
+[INFO] ------------------------------------------------------------------------
+----
+
+	

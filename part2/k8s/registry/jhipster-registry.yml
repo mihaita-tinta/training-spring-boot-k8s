@@ -39,7 +39,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: jhipster-registry
-        image: jhipster/jhipster-registry:3.2.3
+        image: jhipster/jhipster-registry:v3.2.3
         ports:
         - containerPort: 8761
         env:
@@ -61,15 +61,24 @@ spec:
           value: 'false'
         - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
           value: https://github.com/mihaita-tinta/configuration-server-resources.git
+        - name: JAVA_TOOL_OPTIONS
+          value: " -Xmx512m -Xms256m"
         command:
           - "/bin/sh"
           - "-ec"
           - |             
             echo " Starting jHipster Registry . . ."
             
-            java -jar /app.war
+            java -jar /jhipster-registry.war
              
             echo "JHipster Registry started"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1"
         volumeMounts:
         - name: config-volume
           mountPath: /central-config
