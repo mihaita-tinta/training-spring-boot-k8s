@@ -1,5 +1,5 @@
 # gateway
-This application was generated using JHipster 4.6.2, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v4.6.2](https://jhipster.github.io/documentation-archive/v4.6.2).
+This application was generated using JHipster 4.11.1, you can find documentation and help at [http://www.jhipster.tech/documentation-archive/v4.11.1](http://www.jhipster.tech/documentation-archive/v4.11.1).
 
 This is a "gateway" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
@@ -34,6 +34,7 @@ specifying a newer version in [bower.json](bower.json). You can also run `bower 
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+
 
 
 ## Building for production
@@ -81,7 +82,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    ./mvnw package -Pprod docker:build
+    ./mvnw verify -Pprod dockerfile:build
 
 Then run:
 
@@ -93,15 +94,15 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[JHipster Homepage and latest documentation]: https://jhipster.github.io
-[JHipster 4.6.2 archive]: https://jhipster.github.io/documentation-archive/v4.6.2
-[Doing microservices with JHipster]: https://jhipster.github.io/documentation-archive/v4.6.2/microservices-architecture/
-[Using JHipster in development]: https://jhipster.github.io/documentation-archive/v4.6.2/development/
-[Service Discovery and Configuration with the JHipster-Registry]: https://jhipster.github.io/documentation-archive/v4.6.2/microservices-architecture/#jhipster-registry
-[Using Docker and Docker-Compose]: https://jhipster.github.io/documentation-archive/v4.6.2/docker-compose
-[Using JHipster in production]: https://jhipster.github.io/documentation-archive/v4.6.2/production/
-[Running tests page]: https://jhipster.github.io/documentation-archive/v4.6.2/running-tests/
-[Setting up Continuous Integration]: https://jhipster.github.io/documentation-archive/v4.6.2/setting-up-ci/
+[JHipster Homepage and latest documentation]: http://www.jhipster.tech
+[JHipster 4.11.1 archive]: http://www.jhipster.tech/documentation-archive/v4.11.1
+[Doing microservices with JHipster]: http://www.jhipster.tech/documentation-archive/v4.11.1/microservices-architecture/
+[Using JHipster in development]: http://www.jhipster.tech/documentation-archive/v4.11.1/development/
+[Service Discovery and Configuration with the JHipster-Registry]: http://www.jhipster.tech/documentation-archive/v4.11.1/microservices-architecture/#jhipster-registry
+[Using Docker and Docker-Compose]: http://www.jhipster.tech/documentation-archive/v4.11.1/docker-compose
+[Using JHipster in production]: http://www.jhipster.tech/documentation-archive/v4.11.1/production/
+[Running tests page]: http://www.jhipster.tech/documentation-archive/v4.11.1/running-tests/
+[Setting up Continuous Integration]: http://www.jhipster.tech/documentation-archive/v4.11.1/setting-up-ci/
 
 
 [Node.js]: https://nodejs.org/

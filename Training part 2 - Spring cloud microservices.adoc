@@ -67,7 +67,7 @@ Create the docker image for the gateway app.
 
 ----
  cd .\part2\gateway\
- .\mvnw clean package -Dprod docker:build
+ .\mvnw clean package -Dprod dockerfile:build
  
 [INFO] Built gateway
 [INFO] ------------------------------------------------------------------------
@@ -149,6 +149,14 @@ env:
           value: jdbc:postgresql://gateway-postgresql.default.svc.cluster.local:5432/gateway
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
+----
+
+We can activate the swagger profile easily:
+
+----
+env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod,swagger
 ----
 
 If you prefer not using the command line, just run:

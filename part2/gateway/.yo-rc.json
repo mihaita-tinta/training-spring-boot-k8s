@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "com.mihaita.training"
     },
-    "jhipsterVersion": "4.6.2",
+    "jhipsterVersion": "4.11.1",
     "baseName": "gateway",
     "packageName": "com.mihaita.training",
     "packageFolder": "com/mihaita/training",
